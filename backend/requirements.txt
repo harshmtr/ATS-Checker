@@ -1,10 +1,9 @@
 flask
-flask-login
 python-docx
 PyPDF2
 python-dotenv
 requests
-google-generativeai
+google-genai
 Flask-SQLAlchemy
-psycopg2-binary
 gunicorn
+markupsafe==2.0.1
