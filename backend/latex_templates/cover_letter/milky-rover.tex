@@ -1,0 +1,61 @@
+%-------------------------
+% Rover Cover Letter - Milky Template
+%------------------------
+
+\documentclass{article}
+
+\usepackage{charter}
+\usepackage{tgadventor}
+\usepackage[letterspace=100]{microtype}
+\usepackage{soul}
+
+\usepackage[margin=1.5in,bottom=1.2in]{geometry}
+\setcounter{secnumdepth}{0}
+
+\usepackage{titlesec}
+\titlespacing{\section}{0pt}{4ex}{1ex}
+\titlespacing{\subsection}{0pt}{*1}{*0.5}
+\titlespacing{\subsubsection}{0pt}{*0.5}{*1}
+\titleformat*{\section}{\titlerule\smallskip\footnotesize\sffamily\bfseries\lsstyle\uppercase}
+\titleformat*{\subsection}{\Large}
+\titleformat*{\subsubsection}{\large\itshape}
+
+\usepackage{enumitem}
+\setlist[itemize]{left=0pt..2em,itemsep=0pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}	
+\fancyhf{}							
+\cfoot{\sffamily\lsstyle\footnotesize COVER LETTER — PAGE \thepage{}}
+
+
+\begin{document}
+
+\begin{center}
+{\sffamily\LARGE\bfseries \so{<<SENDER_NAME>>}} \par\bigskip
+\sffamily\footnotesize \so{<<SENDER_CONTACT>>} \par\bigskip
+\end{center}
+
+\vspace{1em}
+
+\noindent <<DATE>>
+
+\vspace{2em}
+\noindent <<RECIPIENT_NAME>> \\
+<<RECIPIENT_COMPANY>> \\
+<<RECIPIENT_ADDRESS>>
+
+\vspace{2em}
+\noindent <<SALUTATION>>
+
+\vspace{1em}
+<<BODY_PARAGRAPHS>>
+
+\vspace{2em}
+\noindent <<CLOSING>>,
+
+\vspace{2em}
+\noindent <<SENDER_NAME>>
+
+\end{document}

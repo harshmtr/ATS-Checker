@@ -1,0 +1,49 @@
+\documentclass[11pt]{article} % fontsize 10pt/11pt/12pt
+
+\usepackage[margin=1in, a4paper]{geometry}
+\setcounter{secnumdepth}{0} % remove section numbering
+\usepackage{titlesec}
+\titlespacing{\subsection}{0pt}{*0}{*0} % remove vertical spacing above and below
+\titlespacing{\subsubsection}{0pt}{*0}{*0}
+\titleformat{\section}{\large\bfseries\uppercase}{}{}{}[\titlerule]
+\titleformat*{\subsubsection}{\large\itshape}
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep,left=0pt .. \parindent}
+\pagestyle{empty} % remove page number
+\pdfgentounicode=1
+
+\begin{document}
+
+\begin{center}
+	\begin{minipage}{0.5\textwidth}
+		{\Huge\bfseries
+			<<SENDER_NAME>>
+		}
+	\end{minipage} \hfill
+	\begin{minipage}{0.4\textwidth}
+		\raggedleft
+		<<SENDER_CONTACT>>
+	\end{minipage}
+\end{center}
+\vspace{2em}
+
+\noindent <<DATE>>
+
+\vspace{2em}
+\noindent <<RECIPIENT_NAME>> \\
+<<RECIPIENT_COMPANY>> \\
+<<RECIPIENT_ADDRESS>>
+
+\vspace{2em}
+\noindent <<SALUTATION>>
+
+\vspace{1em}
+<<BODY_PARAGRAPHS>>
+
+\vspace{2em}
+\noindent <<CLOSING>>,
+
+\vspace{2em}
+\noindent <<SENDER_NAME>>
+
+\end{document}

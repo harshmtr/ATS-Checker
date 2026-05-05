@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Resume Analyzer</title>
+</head>
+<body>
+
+<h2>Upload Resume PDF</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="resume" required><br><br>
+
+    <textarea name="job_description" placeholder="Enter Job Description" required></textarea><br><br>
+
+    <button type="submit">Analyze</button>
+</form>
+
+{% if result %}
+    <h3>Result</h3>
+    <p><b>Score:</b> {{ result.score }}</p>
+    <p><b>Matched Skills:</b> {{ result.matched_skills }}</p>
+{% endif %}
+<h2>Missing Keywords</h2>
+<ul>
+{% for word in missed_keywords %}
+<li>{{ word }}</li>
+{% endfor %}
+</ul>
+
+
+
+</body>
+</html>

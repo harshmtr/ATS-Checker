@@ -1,0 +1,60 @@
+\documentclass[11pt]{article} % fontsize 10pt/11pt/12pt
+
+\usepackage[margin=1in, a4paper]{geometry}
+\setcounter{secnumdepth}{0} % remove section numbering
+\usepackage{titlesec}
+\titlespacing{\subsection}{0pt}{*0}{*0} % remove vertical spacing above and below
+\titlespacing{\subsubsection}{0pt}{*0}{*0}
+\titleformat{\section}{\large\bfseries\uppercase}{}{}{}[\titlerule]
+\titleformat*{\subsubsection}{\large\itshape}
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep,left=0pt .. \parindent}
+\pagestyle{empty} % remove page number
+\pdfgentounicode=1
+
+\begin{document}
+
+\begin{center}
+	\begin{minipage}{0.5\textwidth}
+		{\Huge\bfseries
+			<<NAME>>
+		}
+	\end{minipage} \hfill
+	\begin{minipage}{0.4\textwidth}
+		\raggedleft
+		Email: <<EMAIL>> \\
+		Mobile: <<PHONE>> \\
+		LinkedIn: <<LINKEDIN>>
+	\end{minipage}
+\end{center}
+
+<<IF_SUMMARY>>
+\section{Summary}
+<<SUMMARY>>
+<<ENDIF_SUMMARY>>
+
+<<IF_EDUCATION>>
+\section{Education}
+%=================%
+<<EDUCATION>>
+<<ENDIF_EDUCATION>>
+
+<<IF_EXPERIENCE>>
+\section{Experience}
+%=================%
+<<EXPERIENCE>>
+<<ENDIF_EXPERIENCE>>
+
+<<IF_PROJECTS>>
+\section{Projects}
+%=================
+<<PROJECTS>>
+<<ENDIF_PROJECTS>>
+
+<<IF_SKILLS>>
+\section{Skills}
+%===========================%
+<<SKILLS>>
+<<ENDIF_SKILLS>>
+
+\end{document}

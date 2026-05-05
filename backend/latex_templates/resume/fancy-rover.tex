@@ -1,0 +1,108 @@
+%-------------------------
+% Rover Resume - Fancy Template
+%------------------------
+
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\renewcommand*\familydefault{\sfdefault}
+
+\usepackage{geometry}
+\geometry{
+a4paper,
+top=1.8cm,
+bottom=1in,
+left=2.5cm,
+right=2.5cm
+}
+
+\setcounter{secnumdepth}{0} % remove section numbering
+\pdfgentounicode=1 % make ATS friendly
+
+\usepackage[dvipsnames]{xcolor} 
+\colorlet{icnclr}{gray}
+
+\usepackage{enumitem}
+\setlist[itemize]{
+    noitemsep,
+    left=0pt..1.5em
+}
+\setlist[description]{itemsep=0pt}
+\setlist[enumerate]{align=left}
+
+\usepackage{titlesec}
+\titlespacing{\subsection}{0pt}{*0}{*0}
+\titlespacing{\subsubsection}{0pt}{*0}{*0}
+\titleformat{\section}{\color{Sepia}\large\fontseries{black}\selectfont\uppercase}{}{}{\ruleafter}[\global\RemVStrue]
+\titleformat{\subsection}{\large\fontseries{semibold}\selectfont}{}{}{\rvs}
+\titleformat{\subsubsection}{\large\fontseries{medium}\selectfont}{}{}{}
+
+\usepackage{xhfill} 
+\newcommand\ruleafter[1]{#1~\xrfill[.5ex]{1pt}[gray]} % add rule after title in .5 x-height 
+
+\newif\ifRemVS % remove vspace between \section & \subsection
+\newcommand{\rvs}{
+    \ifRemVS
+        \vspace{-1.5ex}
+    \fi
+    \global\RemVSfalse
+}
+
+
+\usepackage{fontawesome5}
+
+\usepackage[bookmarks=false]{hyperref} 
+\hypersetup{ 
+    colorlinks=true,
+    urlcolor=Sepia,
+    pdftitle={Resume},
+}
+
+\usepackage[page]{totalcount}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}	
+\fancyhf{}							
+\cfoot{\color{darkgray} R\'esum\'e -- Page \thepage{} of \totalpages}
+
+
+\begin{document}
+
+%== HEADER ==%
+\begin{center}
+    {\fontsize{36}{36}\selectfont\textbf{<<NAME>>}} \\ \bigskip
+    {\color{icnclr}\faEnvelope[regular]} <<EMAIL>> $|$ 
+    {\color{icnclr}\faIcon{mobile-alt}} <<PHONE>> $|$
+    {\color{icnclr}\faLinkedinIn} <<LINKEDIN>>
+\end{center}
+
+<<IF_SUMMARY>>
+\section{Summary}
+<<SUMMARY>>
+<<ENDIF_SUMMARY>>
+
+<<IF_EDUCATION>>
+\section{Education}
+%==============
+<<EDUCATION>>
+<<ENDIF_EDUCATION>>
+
+<<IF_EXPERIENCE>>
+\section{Experience}
+%===================
+<<EXPERIENCE>>
+<<ENDIF_EXPERIENCE>>
+
+<<IF_PROJECTS>>
+\section{Projects}
+%=================
+<<PROJECTS>>
+<<ENDIF_PROJECTS>>
+
+<<IF_SKILLS>>
+\section{Skills}
+%===============
+<<SKILLS>>
+<<ENDIF_SKILLS>>
+
+\end{document}

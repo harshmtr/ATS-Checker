@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+
+<style>
+    .editor-container {
+        display: flex;
+        height: calc(100vh - 80px);
+        background: var(--bg-dark);
+    }
+    
+    .editor-pane {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--glass-border);
+        overflow-y: auto;
+    }
+    
+    .preview-pane {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        background: rgba(15, 23, 42, 0.9);
+        color: var(--text-main);
+    }
+    
+    .pane-header {
+        padding: 1rem 2rem;
+        background: rgba(30, 41, 59, 0.9);
+        border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .pane-header h3 {
+        font-family: 'Outfit', sans-serif;
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid var(--glass-border);
+        border-radius: 6px;
+        color: var(--text-main);
+        font-family: inherit;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+    
+    textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+    }
+    
+    .preview-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed var(--glass-border);
+        border-radius: 12px;
+        margin-top: 1rem;
+        text-align: center;
+        color: var(--text-muted);
+    }
+</style>
+
+<div class="editor-container">
+    <!-- Left Pane: Form Editor -->
+    <div class="editor-pane">
+        <div class="pane-header">
+            <h3>Resume Data</h3>
+        </div>
+        <div style="padding: 2rem;">
+            <form id="resumeForm">
+                <div class="form-group">
+                    <label for="templateSelect">Select Style</label>
+                    <select id="templateSelect" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="skills">Skills</label>
+                    <textarea id="skills" class="form-control" placeholder="Python, JavaScript, React..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="education">Education</label>
+                    <textarea id="education" class="form-control" placeholder="B.S. Computer Science..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="experience">Experience</label>
+                    <textarea id="experience" class="form-control" placeholder="Software Engineer at Tech Corp..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="projects">Projects</label>
+                    <textarea id="projects" class="form-control" placeholder="Built a scalable web app..."></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Pane: Live Preview -->
+    <div class="preview-pane">
+        <div class="pane-header" style="background: transparent; border-bottom: none; padding: 0; margin-bottom: 1rem;">
+            <h3>Live Preview</h3>
+            <button class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.9rem; background: var(--success);" onclick="generateResume()">Generate Resume</button>
+        </div>
+        <div class="preview-content glass-panel" style="padding: 0; position: relative; overflow: hidden; border: none; background: white;">
+            <iframe id="pdfPreview" style="width: 100%; height: 100%; border: none; display: none;"></iframe>
+            
+            <div id="previewPlaceholder" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: var(--bg-dark);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--bg-dark)" stroke-width="2" style="margin-bottom: 1rem; opacity: 0.5;">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <p style="font-weight: 600; opacity: 0.7;">Click "Generate Resume" to build PDF</p>
+            </div>
+
+            <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: var(--bg-dark);">
+                <p style="font-weight: 600;">Generating PDF...</p>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.5rem;">This may take a few seconds.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        try {
+            const response = await fetch('/api/templates/all');
+            const templates = await response.json();
+            const select = document.getElementById("templateSelect");
+            templates.forEach(t => {
+                const opt = document.createElement("option");
+                opt.value = t;
+                opt.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+                select.appendChild(opt);
+            });
+        } catch (e) {
+            console.error("Failed to load templates", e);
+        }
+    });
+
+    async function generateResume() {
+        const payload = {
+            template: document.getElementById('templateSelect').value,
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            skills: document.getElementById('skills').value,
+            education: document.getElementById('education').value,
+            experience: document.getElementById('experience').value,
+            projects: document.getElementById('projects').value
+        };
+
+        const iframe = document.getElementById("pdfPreview");
+        const placeholder = document.getElementById("previewPlaceholder");
+        const loader = document.getElementById("loadingIndicator");
+        
+        iframe.style.display = 'none';
+        placeholder.style.display = 'none';
+        loader.style.display = 'block';
+        
+        try {
+            const response = await fetch('/generate-resume', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                throw new Error("Compilation failed. Status: " + response.status + " | " + (errorData ? JSON.stringify(errorData) : ""));
+            }
+            
+            // The API returns the PDF as a blob
+            const blob = await response.blob();
+            const pdfUrl = URL.createObjectURL(blob);
+            
+            iframe.src = pdfUrl;
+            iframe.onload = function() {
+                loader.style.display = 'none';
+                iframe.style.display = 'block';
+            };
+        } catch (error) {
+            console.error("Error compiling PDF:", error);
+            alert("Error compiling PDF: " + error.message);
+            loader.style.display = 'none';
+            placeholder.style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

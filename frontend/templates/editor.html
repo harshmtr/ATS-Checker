@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Resume Editor</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="editor-container">
+
+  <div class="form-section">
+    <h2>Enter Your Details</h2>
+
+    <input type="text" id="name" placeholder="Your Name">
+    <input type="text" id="role" placeholder="Your Role">
+    <textarea id="about" placeholder="About You"></textarea>
+
+    <button onclick="generateResume()">Generate Resume</button>
+  </div>
+
+  <div class="preview-section" id="preview">
+    <h1 id="preview-name">Your Name</h1>
+    <h3 id="preview-role">Your Role</h3>
+    <p id="preview-about">About section will appear here...</p>
+  </div>
+
+</div>
+
+<script src="{{ url_for('templates', filename='script.js') }}"></script>
+</body>
+</html>

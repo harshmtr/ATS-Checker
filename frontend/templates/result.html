@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="result-container">
+    {% if score is defined %}
+    <h2>Your ATS Analysis Result</h2>
+
+    <div class="progress-wrapper {% if score >= 80 %}score-high{% elif score >= 50 %}score-med{% else %}score-low{% endif %}">
+        <svg viewBox="0 0 36 36" class="circular-chart">
+            <path class="circle-bg"
+                d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+            <path class="circle"
+                stroke-dasharray="{{ score }}, 100"
+                d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+            <text x="18" y="20.35" class="percentage">{{ score }}%</text>
+        </svg>
+    </div>
+
+    <div class="keywords-section">
+        <div class="keyword-box matched glass-panel">
+            <h3>Matched Keywords</h3>
+            <div class="badge-container">
+                {% if matched_keywords %}
+                    {% for keyword in matched_keywords %}
+                        <span class="badge badge-matched">{{ keyword }}</span>
+                    {% endfor %}
+                {% else %}
+                    <span class="text-muted">No keywords matched.</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="keyword-box missed glass-panel">
+            <h3>Missing Keywords</h3>
+            <div class="badge-container">
+                {% if missed_keywords %}
+                    {% for keyword in missed_keywords %}
+                        <span class="badge badge-missed">{{ keyword }}</span>
+                    {% endfor %}
+                {% else %}
+                    <span class="text-muted">Great job! No missing keywords.</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <a href="/#analyzer" class="btn-primary" style="margin-top: 1rem;">Analyze Another Resume</a>
+    {% endif %}
+
+    {% if cover_letter %}
+    <h2>Your AI-Generated Cover Letter</h2>
+    <div class="glass-panel" style="padding: 2.5rem; text-align: left; white-space: pre-wrap; font-family: 'Inter', sans-serif; line-height: 1.6; margin-bottom: 2rem;">
+{{ cover_letter }}
+    </div>
+    <a href="/create" class="btn-primary">Generate Another</a>
+    {% endif %}
+</div>
+{% endblock %}

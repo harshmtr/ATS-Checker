@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="result-container" style="max-width: 600px;">
+    <h2>Upload Custom Template</h2>
+    <p class="text-muted" style="margin-bottom: 2rem;">Upload your custom `.tex` files to use them directly in the form builders.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <style>
+                .flash-error { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); color: var(--danger); }
+                .flash-success { background: rgba(34, 197, 94, 0.1); border-color: var(--success); color: var(--success); }
+                .flash-base { padding: 1rem; margin-bottom: 1rem; }
+            </style>
+            {% for category, message in messages %}
+                <div class="glass-panel flash-base flash-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="glass-panel" style="padding: 2rem; text-align: left;">
+        <form method="POST" action="/upload-template" enctype="multipart/form-data">
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="template_type" style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Template Category</label>
+                <select name="template_type" id="template_type" class="form-control" style="width: 100%; padding: 0.75rem; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); border-radius: 6px; color: var(--text-main);">
+                    <option value="resume">Resume Builder</option>
+                    <option value="cv">CV Maker</option>
+                    <option value="cover_letter">Cover Letter Builder</option>
+                </select>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label for="file" style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Select .tex File</label>
+                <input type="file" name="file" id="file" accept=".tex" style="width: 100%; padding: 0.75rem; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); border-radius: 6px; color: var(--text-main);">
+            </div>
+            
+            <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem; background: var(--success);">Upload Template</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

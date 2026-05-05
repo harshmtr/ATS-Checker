@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .tools-dashboard {
+        max-width: 1000px;
+        margin: 4rem auto;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .tools-dashboard h2 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .tools-dashboard p {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        margin-bottom: 3rem;
+    }
+
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .tool-card {
+        padding: 3rem 2rem;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-decoration: none;
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .tool-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(6, 182, 212, 0.2);
+        border-color: var(--primary);
+    }
+
+    .tool-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(6, 182, 212, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+    }
+
+    .tool-card h3 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.5rem;
+    }
+
+    .tool-card p {
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.5;
+    }
+</style>
+
+<div class="tools-dashboard">
+    <h2>Powerful Career Tools</h2>
+    <p>Everything you need to craft the perfect application package, all in one place.</p>
+
+    <div class="tools-grid">
+        <!-- ATS Analyzer -->
+        <a href="/#analyzer" class="glass-panel tool-card">
+            <div class="tool-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+            </div>
+            <h3>ATS Analyzer</h3>
+            <p>Score your resume against any job description instantly.</p>
+        </a>
+
+        <!-- Resume Builder -->
+        <a href="{{ url_for('resume_builder') }}" class="glass-panel tool-card">
+            <div class="tool-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+            </div>
+            <h3>Resume Builder</h3>
+            <p>Quickly generate a professional resume by filling out a simple form.</p>
+        </a>
+
+        <!-- LaTeX Builder -->
+        <a href="{{ url_for('latex_resume_builder') }}" class="glass-panel tool-card">
+            <div class="tool-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+            </div>
+            <h3>LaTeX Resume Builder</h3>
+            <p>Code beautiful, highly-customizable resumes using our modern LaTeX editor.</p>
+        </a>
+
+        <!-- CV Maker -->
+        <a href="{{ url_for('cv') }}" class="glass-panel tool-card">
+            <div class="tool-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+            </div>
+            <h3>CV Maker</h3>
+            <p>Build comprehensive academic and professional CVs effortlessly.</p>
+        </a>
+
+        <!-- Cover Letter Builder -->
+        <a href="{{ url_for('cover_letter') }}" class="glass-panel tool-card">
+            <div class="tool-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+            </div>
+            <h3>Cover Letter Builder</h3>
+            <p>Generate tailored cover letters that grab recruiters' attention.</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

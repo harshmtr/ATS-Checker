@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="glass-panel auth-card">
+        <h2>Create an Account</h2>
+        <form method="POST" action="/register">
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <input type="text" name="username" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <input type="email" name="email" class="form-control" placeholder="Email Address">
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn-primary submit-btn">Register</button>
+        </form>
+        <div class="auth-links">
+            <p>Already have an account? <a href="/login">Sign in</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

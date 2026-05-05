@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Choose Template</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2 class="center">Build a Resume With a Customizable Template</h2>
+
+<div class="template-container">
+
+  <div class="template-card" onclick="selectTemplate('template1')">
+    <img src="https://via.placeholder.com/200x250">
+    <button>Use This Template</button>
+  </div>
+
+  <div class="template-card" onclick="selectTemplate('template2')">
+    <img src="https://via.placeholder.com/200x250">
+    <button>Use This Template</button>
+  </div>
+
+</div>
+
+<script src="{{ url_for('templates', filename='script.js') }}"></script>
+</body>
+</html>

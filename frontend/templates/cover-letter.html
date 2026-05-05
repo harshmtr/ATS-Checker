@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .editor-container {
+        display: flex;
+        height: calc(100vh - 80px);
+        background: var(--bg-dark);
+    }
+    
+    .editor-pane {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--glass-border);
+        overflow-y: auto;
+    }
+    
+    .preview-pane {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        background: rgba(15, 23, 42, 0.9);
+        color: var(--text-main);
+    }
+    
+    .pane-header {
+        padding: 1rem 2rem;
+        background: rgba(30, 41, 59, 0.9);
+        border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .pane-header h3 {
+        font-family: 'Outfit', sans-serif;
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid var(--glass-border);
+        border-radius: 6px;
+        color: var(--text-main);
+        font-family: inherit;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+    
+    textarea.form-control {
+        resize: vertical;
+        min-height: 150px;
+    }
+    
+    .preview-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed var(--glass-border);
+        border-radius: 12px;
+        margin-top: 1rem;
+        text-align: center;
+        color: var(--text-muted);
+    }
+</style>
+
+<div class="editor-container">
+    <!-- Left Pane: Form Editor -->
+    <div class="editor-pane">
+        <div class="pane-header">
+            <h3>Cover Letter Data</h3>
+            <a href="{{ url_for('latex_cover_letter') }}" class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.9rem; text-decoration: none;">LaTeX Cover Letter</a>
+        </div>
+        <div style="padding: 2rem;">
+            <form id="coverLetterForm">
+                <div class="form-group">
+                    <label for="templateSelect">Select Style</label>
+                    <select id="templateSelect" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="address">Your Address & Contact</label>
+                    <textarea id="address" class="form-control" style="min-height: 80px;" placeholder="123 Main St.\\City, State 12345\\john@example.com"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="hiring_manager">Hiring Manager Name</label>
+                    <input type="text" id="hiring_manager" class="form-control" placeholder="Jane Smith">
+                </div>
+                <div class="form-group">
+                    <label for="company">Company Name & Address</label>
+                    <textarea id="company" class="form-control" style="min-height: 80px;" placeholder="Tech Innovators Inc.\\456 Tech Park\\City, State 67890"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="body">Letter Body</label>
+                    <textarea id="body" class="form-control" placeholder="I am writing to express my interest in the Software Engineer position..."></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Pane: Live Preview -->
+    <div class="preview-pane">
+        <div class="pane-header" style="background: transparent; border-bottom: none; padding: 0; margin-bottom: 1rem;">
+            <h3>Live Preview</h3>
+            <button class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.9rem; background: var(--success);" onclick="generateCoverLetter()">Generate Letter</button>
+        </div>
+        <div class="preview-content glass-panel" style="padding: 0; position: relative; overflow: hidden; border: none; background: white;">
+            <iframe id="pdfPreview" style="width: 100%; height: 100%; border: none; display: none;"></iframe>
+            
+            <div id="previewPlaceholder" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: var(--bg-dark);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--bg-dark)" stroke-width="2" style="margin-bottom: 1rem; opacity: 0.5;">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <p style="font-weight: 600; opacity: 0.7;">Click "Generate Letter" to build PDF</p>
+            </div>
+
+            <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: var(--bg-dark);">
+                <p style="font-weight: 600;">Generating PDF...</p>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.5rem;">This may take a few seconds.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        try {
+            const response = await fetch('/api/templates/all');
+            const templates = await response.json();
+            const select = document.getElementById("templateSelect");
+            templates.forEach(t => {
+                const opt = document.createElement("option");
+                opt.value = t;
+                opt.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+                select.appendChild(opt);
+            });
+        } catch (e) {
+            console.error("Failed to load templates", e);
+        }
+    });
+
+    async function generateCoverLetter() {
+        const payload = {
+            template: document.getElementById('templateSelect').value,
+            name: document.getElementById('name').value,
+            address: document.getElementById('address').value,
+            hiring_manager: document.getElementById('hiring_manager').value,
+            company: document.getElementById('company').value,
+            body: document.getElementById('body').value
+        };
+
+        const iframe = document.getElementById("pdfPreview");
+        const placeholder = document.getElementById("previewPlaceholder");
+        const loader = document.getElementById("loadingIndicator");
+        
+        iframe.style.display = 'none';
+        placeholder.style.display = 'none';
+        loader.style.display = 'block';
+        
+        try {
+            const response = await fetch('/generate-cover-letter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                throw new Error("Compilation failed. Status: " + response.status + " | " + (errorData ? JSON.stringify(errorData) : ""));
+            }
+            
+            // The API returns the PDF as a blob
+            const blob = await response.blob();
+            const pdfUrl = URL.createObjectURL(blob);
+            
+            iframe.src = pdfUrl;
+            iframe.onload = function() {
+                loader.style.display = 'none';
+                iframe.style.display = 'block';
+            };
+        } catch (error) {
+            console.error("Error compiling PDF:", error);
+            alert("Error compiling PDF: " + error.message);
+            loader.style.display = 'none';
+            placeholder.style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

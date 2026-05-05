@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS Resume Checker - Premium</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern_style.css') }}">
+</head>
+
+<body>
+
+    <!-- Modern Glassmorphism Navbar with User Flow -->
+    <nav class="modern-nav">
+        <h1>ATS Checker</h1>
+
+        <div class="nav-flow">
+            <a href="/">Home</a>
+            <span class="flow-arrow">→</span>
+            <a href="/#analyzer">ATS Analyzer</a>
+            <span class="flow-arrow">→</span>
+            <a href="{{ url_for('resume_builder') }}">Resume Builder</a>
+            <span class="flow-arrow">→</span>
+            <a href="{{ url_for('tools') }}">More Tools</a>
+        </div>
+
+        <div class="nav-actions">
+            <a href="{{ url_for('register') }}" class="btn-glass">Sign In</a>
+            <a href="{{ url_for('register') }}" class="btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+</body>
+
+</html>

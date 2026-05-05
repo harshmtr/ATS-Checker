@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-modern" id="analyzer">
+    <h1>Unlock Your Career Potential with <span>AI-Powered ATS</span> Scoring</h1>
+    <p>Upload your resume and the target job description to get instant, actionable feedback. Ensure your resume bypasses the ATS and lands on the recruiter's desk.</p>
+    
+    <div class="glass-panel upload-glass-card">
+        <form action="/analyze" method="POST" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label>Upload Your Resume (PDF/DOCX)</label>
+                <input type="file" name="resume" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Target Job Description</label>
+                <textarea name="job_description" class="form-control" placeholder="Paste the job description here..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary submit-btn">Analyze Resume Now</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .result-dashboard {
+        max-width: 900px;
+        margin: 4rem auto;
+        padding: 2rem;
+    }
+
+    .score-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: conic-gradient(var(--primary) var(--score), rgba(255,255,255,0.1) 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        position: relative;
+    }
+
+    .score-circle::before {
+        content: "";
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        background: var(--bg-dark);
+        border-radius: 50%;
+    }
+
+    .score-value {
+        position: relative;
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--text-main);
+    }
+
+    .score-label {
+        text-align: center;
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        margin-bottom: 3rem;
+    }
+
+    .analysis-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .analysis-card {
+        padding: 2rem;
+    }
+
+    .analysis-card h3 {
+        font-family: 'Outfit', sans-serif;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .tag {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+    .tag.match {
+        background: rgba(34, 197, 94, 0.1);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .tag.miss {
+        background: rgba(239, 68, 68, 0.1);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+</style>
+
+<div class="result-dashboard">
+    <div class="glass-panel" style="text-align: center; padding: 4rem 2rem;">
+        <h2>ATS Analysis Complete</h2>
+        
+        <div class="score-circle" style="--score: {{ result.score }}%">
+            <div class="score-value">{{ result.score }}<span style="font-size: 1.5rem">%</span></div>
+        </div>
+        <div class="score-label">Resume Match Score</div>
+
+        <div class="analysis-grid">
+            <!-- Matched Skills -->
+            <div class="glass-panel analysis-card" style="text-align: left;">
+                <h3>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Matched Skills
+                </h3>
+                <ul class="tag-list">
+                    {% for skill in matched_keywords %}
+                        <li class="tag match">{{ skill }}</li>
+                    {% else %}
+                        <li class="text-muted">No specific matching skills found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Missing Keywords -->
+            <div class="glass-panel analysis-card" style="text-align: left;">
+                <h3>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                    Missing Keywords
+                </h3>
+                <ul class="tag-list">
+                    {% for word in missed_keywords %}
+                        <li class="tag miss">{{ word }}</li>
+                    {% else %}
+                        <li class="text-muted">Great job! No major missing keywords.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Suggestions Section -->
+        {% if suggestions %}
+        <div class="glass-panel analysis-card" style="margin-top: 2rem; text-align: left;">
+            <h3>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                Improvement Suggestions
+            </h3>
+            <p style="color: var(--text-muted); line-height: 1.6;">{{ suggestions }}</p>
+        </div>
+        {% endif %}
+
+        <div style="margin-top: 3rem;">
+            <a href="/#analyzer" class="btn-primary" style="text-decoration: none;">Analyze Another Resume</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
