@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/(api|analyze|generate-resume|generate-cover-letter|editor|resume-builder|tools|resume|cv|cover-letter|about|account|register|latex-.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/",
+      "destination": "/api/index.py"
+    }
+  ],
+  "env": {
+    "PYTHONPATH": "."
+  }
+}
