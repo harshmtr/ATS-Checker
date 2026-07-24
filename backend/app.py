@@ -29,10 +29,18 @@ app = Flask(__name__,
             static_folder=os.path.join(frontend_dir, 'static'))
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "fallback-secret-key")
 
-# Initialize Analyzer
-analyzer = ATSAnalyzer()
+# ── Lazy-loaded Analyzer (optimized for serverless cold starts) ────────────────
+_analyzer_instance = None
 
-# ── Helper Functions ─────────────────────────────────────────────────────────
+def get_analyzer():
+    """Lazy-load the ATSAnalyzer on first use to reduce cold start time."""
+    global _analyzer_instance
+    if _analyzer_instance is None:
+        logger.info("Initializing ATSAnalyzer (first request)...")
+        _analyzer_instance = ATSAnalyzer()
+    return _analyzer_instance
+
+# ── Helper Functions ────────────────────────────────────────────────────────
 
 def extract_pdf(file):
     try:
@@ -57,10 +65,10 @@ def escape_latex(text):
 
 def fill_template(content, data):
     for key, val in data.items():
-        content = content.replace(f"<<{key.upper()}>>", escape_latex(str(val)))
+        content = content.replace(f"<<{key.upper()>>", escape_latex(str(val)))
     return content
 
-# ── Page Routes ──────────────────────────────────────────────────────────────
+# ── Page Routes ──────────────────────────────────────────────────────────
 
 @app.route('/')
 def home(): 
@@ -148,7 +156,7 @@ def generate_resume():
         logger.error(f"Generate resume error: {e}")
         return jsonify({"error": str(e)}), 500
 
-# ── API Routes ──────────────────────────────────────────────────────────────
+# ── API Routes ──────────────────────────────────────────────────────────
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
@@ -184,7 +192,8 @@ def analyze():
             flash(error_msg, 'error')
             return redirect(url_for('home', _anchor='analyzer'))
 
-        # 3. Analysis via Shared Logic
+        # 3. Analysis via Shared Logic (lazy-load analyzer here)
+        analyzer = get_analyzer()
         result = analyzer.analyze(resume_text, job_desc)
         
         # 4. Response Logic
